@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CeyGo Master Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#0B1E3D",
+            "accent": "#FF7A00",
+            "background-light": "#F4F7FB",
+            "background-dark": "#1a1a1a",
+          },
+          fontFamily: {
+            "display": ["Poppins", "Public Sans", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    body { font-family: 'Poppins', sans-serif; }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .sidebar-active {
+      background-color: rgba(255, 122, 0, 0.1);
+      border-left: 4px solid #FF7A00;
+      color: #FF7A00;
+    }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100">
+<div class="flex h-screen overflow-hidden">
+
+ 
+  <!-- Sidebar -->
+  <%- include("partials/sidebar", { activePage: "dashboard" }) %>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <%- include("partials/header", { admin: admin }) %>
+
+  <!-- Main Content -->
+  <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
+   
+
+    <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+      <!-- Dashboard Overview -->
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h2 class="text-2xl font-bold text-primary dark:text-white">Dashboard Overview</h2>
+          <p class="text-slate-500 text-sm">Welcome back, <%= admin.name %>. Here's what's happening today.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <% stats.forEach(stat => { %>
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 flex items-center gap-4">
+          <div class="size-12 bg-<%= stat.color %>-100 dark:bg-<%= stat.color %>-900/30 text-<%= stat.color %>-600 rounded-xl flex items-center justify-center">
+            <span class="material-symbols-outlined"><%= stat.icon %></span>
+          </div>
+          <div>
+            <p class="text-xs text-slate-500 font-medium uppercase tracking-wider"><%= stat.label %></p>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white"><%= stat.value %></h3>
+            <% if(stat.change) { %>
+            <p class="text-[11px] text-green-500 font-semibold mt-1 flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">trending_up</span> <%= stat.change %>
+            </p>
+            <% } %>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+
+      <!-- Recent Bookings -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left">
+            <thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-[11px] font-bold uppercase tracking-wider">
+              <tr>
+                <th class="px-6 py-4">Booking ID</th>
+                <th class="px-6 py-4">Customer</th>
+                <th class="px-6 py-4">Destination</th>
+                <th class="px-6 py-4">Amount</th>
+                <th class="px-6 py-4">Status</th>
+                <th class="px-6 py-4 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+              <% recentBookings.forEach(booking => { %>
+              <tr class="hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                <td class="px-6 py-4 text-sm font-semibold text-primary dark:text-accent"><%= booking.id %></td>
+                <td class="px-6 py-4">
+                  <div class="flex items-center gap-3">
+                    <div class="size-8 rounded-full bg-accent/20 text-accent flex items-center justify-center text-xs font-bold"><%= booking.initials %></div>
+                    <span class="text-sm font-medium text-slate-900 dark:text-white"><%= booking.customer %></span>
+                  </div>
+                </td>
+                <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400"><%= booking.destination %></td>
+                <td class="px-6 py-4 text-sm font-bold text-slate-900 dark:text-white"><%= booking.amount %></td>
+                <td class="px-6 py-4">
+                  <span class="inline-flex items-center gap-1 bg-<%= booking.statusColor %>-50 dark:bg-<%= booking.statusColor %>-900/20 text-<%= booking.statusColor %>-600 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase">
+                    <span class="size-1.5 bg-<%= booking.statusColor %>-600 rounded-full"></span> <%= booking.status %>
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-right">
+                  <button class="text-slate-400 hover:text-primary dark:hover:text-white transition-colors">
+                    <span class="material-symbols-outlined">visibility</span>
+                  </button>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

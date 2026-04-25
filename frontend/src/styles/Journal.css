@@ -1,0 +1,219 @@
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  background: #f4f7fb;
+  color: #0b1e3d;
+}
+
+/* ===== FILTER BUTTONS ===== */
+.filter-buttons {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.filter-buttons button {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  margin: 0.3rem 0;
+  font-weight: 500;
+}
+
+.filter-buttons button.active {
+  background: #0b1e3d;
+  color: #fff;
+}
+
+.filter-buttons .add-entry {
+  background: #ff7b00;
+  color: #fff;
+}
+
+/* ===== JOURNAL GRID ===== */
+.journal-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+@media(min-width: 768px) {
+  .journal-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media(min-width: 1024px) {
+  .journal-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.journal-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: 0.3s;
+}
+
+.journal-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.journal-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.journal-card-content {
+  padding: 1rem;
+}
+
+.journal-card .category {
+  background: #eef2fb;
+  color: #0b1e3d;
+  padding: 0.25rem 0.6rem;
+  border-radius: 5px;
+  font-size: 0.75rem;
+}
+
+.journal-card h3 {
+  margin: 0.5rem 0;
+}
+
+.journal-card .location {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.journal-card .tags {
+  margin-top: 0.5rem;
+}
+
+.journal-card .tags span {
+  background: #eef2fb;
+  color: #0b1e3d;
+  margin-right: 0.3rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+}
+
+/* ===== REVIEWS SECTION ===== */
+.reviews-section {
+  padding: 2rem;
+  text-align: center;
+}
+
+.reviews-section h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.reviews-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media(min-width: 768px) {
+  .reviews-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.review-card {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  transition: 0.3s;
+}
+
+.review-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+.review-card img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.review-card h4 {
+  margin: 0.5rem 0 0 0;
+}
+
+.review-card .location {
+  font-size: 0.8rem;
+  color: #555;
+}
+
+/* ===== AGENTS SECTION ===== */
+.agents-section {
+  padding: 2rem;
+  text-align: center;
+}
+
+.agents-section h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.agents-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media(min-width: 768px) {
+  .agents-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.agent-card {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  transition: 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.agent-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+.agent-card img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+.agent-card h4 {
+  margin: 0.5rem 0 0 0;
+}
+
+.agent-card p {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.agent-card .book-btn {
+  background: #ff7b00;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  width: 100%;
+  font-weight: bold;
+}
+

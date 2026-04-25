@@ -1,0 +1,231 @@
+/* ================= PAGE ================= */
+
+.login-page {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  min-height: 100vh;
+  display: flex;
+  background-color: #f6f7f8;
+}
+
+.login-container {
+  display: flex;
+  flex: 1;
+}
+
+/* ================= LEFT ================= */
+
+.login-left {
+  flex: 1;
+  background: url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e")
+    center/cover no-repeat;
+  position: relative;
+}
+
+.overlay {
+  background: linear-gradient(
+    135deg,
+    rgba(11, 30, 61, 0.9),
+    rgba(11, 30, 61, 0.5)
+  );
+  color: #fff;
+  height: 100%;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.brand-name {
+  font-size: 1.8rem;
+  font-weight: 900;
+}
+
+.login-left h1 {
+  font-size: 2.3rem;
+  margin: 2rem 0 1rem;
+}
+
+.login-left p {
+  max-width: 24rem;
+  line-height: 1.6;
+}
+
+.footer-text {
+  font-size: 0.875rem;
+  color: #d1d5db;
+}
+
+/* ================= RIGHT ================= */
+
+.login-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+}
+
+.form-card {
+  background: #fff;
+  padding: 2.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 26rem;
+}
+
+.form-card h2 {
+  margin-bottom: 0.5rem;
+}
+
+.form-card p {
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+}
+
+/* ================= INPUT ================= */
+
+.input-group {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.input-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+}
+
+.input-group input:focus {
+  border-color: #0b1e3d;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(11, 30, 61, 0.2);
+}
+
+.toggle-btn {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+}
+
+/* ================= OPTIONS ================= */
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.form-options a {
+  color: #0b1e3d;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* ================= BUTTONS ================= */
+
+.login-btn {
+  width: 100%;
+  background: #ff7a00;
+  color: #fff;
+  font-weight: 700;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  border: none;
+  cursor: pointer;
+}
+
+.login-btn:hover {
+  background: #e56d00;
+}
+
+.divider {
+  text-align: center;
+  margin: 1.5rem 0;
+  color: #6b7280;
+}
+
+.google-btn {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.75rem;
+  background: #fff;
+  cursor: pointer;
+}
+
+.register-text {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+/* ================= CHATBOT ================= */
+
+.chatbot-btn {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+}
+
+.chatbot-btn button {
+  width: 3.5rem;
+  height: 3.5rem;
+  background: #0b1e3d;
+  color: #fff;
+  border-radius: 50%;
+  border: none;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.tooltip {
+  position: absolute;
+  top: -2.5rem;
+  background: #111827;
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 0.5rem;
+  opacity: 0;
+  white-space: nowrap;
+}
+
+.chatbot-btn button:hover .tooltip {
+  opacity: 1;
+}
+
+
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1024px) {
+  .login-container {
+    flex-direction: column;
+  }
+
+  .login-left,
+  .login-right {
+    padding: 2rem;
+  }
+}
