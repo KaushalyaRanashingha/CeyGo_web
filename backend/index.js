@@ -1,62 +1,82 @@
 const express = require("express");
-const path = require("path");
-const cookieParser = require("cookie-parser");
-const multer = require("multer");
-
-// Connect Database
-require("./config/db");
-
-const authRoutes = require("./routes/authRoutes");
-const adminRoutes = require("./routes/adminRoutes");
-const hotelRoutes = require("./routes/hotelRoutes");
-const vehicleRoutes = require("./routes/vehicleRoutes");
-const restaurantRoutes = require("./routes/restaurantRoutes");
-const agentRoutes = require("./routes/agentRoutes");
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const cors = require("cors");
+require("dotenv").config();
 
 const app = express();
 
-// View Engine
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+app.use(cors());
+app.use(express.json());
 
-// Middleware
-app.use(express.json()); // Parse JSON
-app.use(express.urlencoded({ extended: true })); // Parse URL-encoded forms
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
-app.use("/upload", express.static(path.join(__dirname, "upload"))); // Serve uploaded files
+// MongoDB
+mongoose
+  .connect(process.env.MONGO_URI || "mongodb://localhost:27017/ceygo")
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.log(err));
 
-// Multer setup for file uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "upload"); // Save files to ./upload folder
+// ── USER MODEL ─────────────────────
+const userSchema = new mongoose.Schema(
+  {
+    name: String,
+    email: { type: String, unique: true },
+    password: String,
   },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
-const upload = multer({ storage });
+  { timestamps: true }
+);
 
-// Pass multer middleware to routes that handle file uploads
-app.use((req, res, next) => {
-  req.upload = upload;
-  next();
+// ✅ FIXED password hashing (NO next() error)
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
+  this.password = await bcrypt.hash(this.password, 10);
 });
 
-// Default redirect to login
-app.get("/", (req, res) => {
-  res.redirect("/login");
+const User = mongoose.model("User", userSchema);
+
+// JWT
+const createToken = (id) =>
+  jwt.sign({ id }, process.env.JWT_SECRET || "secret", {
+    expiresIn: "7d",
+  });
+
+// ── SIGNUP ─────────────────────
+app.post("/api/auth/signup", async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+
+    const exist = await User.findOne({ email });
+    if (exist) return res.status(400).json({ message: "Email exists" });
+
+    const user = await User.create({ name, email, password });
+
+    res.json({
+      token: createToken(user._id),
+      user: { id: user._id, name: user.name, email: user.email },
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
-// Routes
-app.use("/", authRoutes);      // login/register
-app.use("/admin", adminRoutes);
-app.use("/hotel", hotelRoutes);
-app.use("/vehicle", vehicleRoutes);
-app.use("/restaurant", restaurantRoutes);
-app.use("/agent", agentRoutes);
+// ── LOGIN ─────────────────────
+app.post("/api/auth/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-// Start Server
-app.listen(5004, () => {
-  console.log("Server running on http://localhost:5004");
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ message: "Invalid" });
+
+    const ok = await bcrypt.compare(password, user.password);
+    if (!ok) return res.status(400).json({ message: "Invalid" });
+
+    res.json({
+      token: createToken(user._id),
+      user: { id: user._id, name: user.name, email: user.email },
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
 });
+
+app.listen(5004, () => console.log("Server running on 5004"));
