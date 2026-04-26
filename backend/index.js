@@ -1,3 +1,5 @@
+// index.js
+
 const express = require("express");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
@@ -7,76 +9,196 @@ require("dotenv").config();
 
 const app = express();
 
+/* ─────────────────────────────────────────
+   Middlewares
+───────────────────────────────────────── */
 app.use(cors());
 app.use(express.json());
 
-// MongoDB
+/* ─────────────────────────────────────────
+   MongoDB Connection
+───────────────────────────────────────── */
 mongoose
-  .connect(process.env.MONGO_URI || "mongodb://localhost:27017/ceygo")
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.log(err));
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("✅ MongoDB connected successfully");
+  })
+  .catch((err) => {
+    console.log("❌ MongoDB connection error:", err.message);
+  });
 
-// ── USER MODEL ─────────────────────
+/* ─────────────────────────────────────────
+   User Schema + Model
+───────────────────────────────────────── */
 const userSchema = new mongoose.Schema(
   {
-    name: String,
-    email: { type: String, unique: true },
-    password: String,
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+    },
+
+    password: {
+      type: String,
+      required: true,
+      minlength: 6,
+    },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
-// ✅ FIXED password hashing (NO next() error)
+/* Password Hash Before Save */
 userSchema.pre("save", async function () {
   if (!this.isModified("password")) return;
-  this.password = await bcrypt.hash(this.password, 10);
+
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
 });
 
 const User = mongoose.model("User", userSchema);
 
-// JWT
-const createToken = (id) =>
-  jwt.sign({ id }, process.env.JWT_SECRET || "secret", {
-    expiresIn: "7d",
-  });
+/* ─────────────────────────────────────────
+   JWT Token Generator
+───────────────────────────────────────── */
+const createToken = (id) => {
+  return jwt.sign(
+    { id },
+    process.env.JWT_SECRET,
+    { expiresIn: "7d" }
+  );
+};
 
-// ── SIGNUP ─────────────────────
+/* ─────────────────────────────────────────
+   Routes
+───────────────────────────────────────── */
+
+/* Health Check */
+app.get("/", (req, res) => {
+  res.send("CeyGo Backend Running ✅");
+});
+
+/* ── SIGNUP ───────────────────────── */
 app.post("/api/auth/signup", async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    const exist = await User.findOne({ email });
-    if (exist) return res.status(400).json({ message: "Email exists" });
+    /* Validation */
+    if (!name || !email || !password) {
+      return res.status(400).json({
+        message: "Please fill all fields",
+      });
+    }
 
-    const user = await User.create({ name, email, password });
+    if (password.length < 6) {
+      return res.status(400).json({
+        message: "Password must be at least 6 characters",
+      });
+    }
 
-    res.json({
-      token: createToken(user._id),
-      user: { id: user._id, name: user.name, email: user.email },
+    /* Check Existing User */
+    const existingUser = await User.findOne({
+      email: email.toLowerCase(),
     });
-  } catch (err) {
-    res.status(500).json({ message: "Server error" });
+
+    if (existingUser) {
+      return res.status(400).json({
+        message: "Email already exists",
+      });
+    }
+
+    /* Create User */
+    const user = await User.create({
+      name: name.trim(),
+      email: email.toLowerCase().trim(),
+      password,
+    });
+
+    res.status(201).json({
+      message: "Signup successful",
+      token: createToken(user._id),
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    console.log("Signup Error:", error.message);
+
+    res.status(500).json({
+      message: "Server error during signup",
+    });
   }
 });
 
-// ── LOGIN ─────────────────────
+/* ── LOGIN ───────────────────────── */
 app.post("/api/auth/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "Invalid" });
+    /* Validation */
+    if (!email || !password) {
+      return res.status(400).json({
+        message: "Please provide email and password",
+      });
+    }
 
-    const ok = await bcrypt.compare(password, user.password);
-    if (!ok) return res.status(400).json({ message: "Invalid" });
-
-    res.json({
-      token: createToken(user._id),
-      user: { id: user._id, name: user.name, email: user.email },
+    /* Find User */
+    const user = await User.findOne({
+      email: email.toLowerCase().trim(),
     });
-  } catch (err) {
-    res.status(500).json({ message: "Server error" });
+
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid email or password",
+      });
+    }
+
+    /* Compare Password */
+    const isMatch = await bcrypt.compare(
+      password,
+      user.password
+    );
+
+    if (!isMatch) {
+      return res.status(400).json({
+        message: "Invalid email or password",
+      });
+    }
+
+    res.status(200).json({
+      message: "Login successful",
+      token: createToken(user._id),
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    console.log("Login Error:", error.message);
+
+    res.status(500).json({
+      message: "Server error during login",
+    });
   }
 });
 
-app.listen(5004, () => console.log("Server running on 5004"));
+/* ─────────────────────────────────────────
+   Server Start
+───────────────────────────────────────── */
+const PORT = process.env.PORT || 5004;
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});

@@ -4,7 +4,7 @@ import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Interface from "./pages/Interface";
-import Destionation from "./pages/Destinations";
+import Destinations from "./pages/Destinations";
 
 function App() {
   return (
@@ -14,7 +14,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/interface" element={<Interface />} />
-        <Route path="/destinations" element={<Destionation />} />
+        <Route path="/destinations" element={<Destinations />} />
       </Routes>
     </BrowserRouter>
   );
