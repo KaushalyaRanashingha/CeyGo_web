@@ -5,6 +5,10 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Interface from "./pages/Interface";
 import Destinations from "./pages/Destinations";
+import Budget from "./pages/Budget";
+import Weather from "./pages/Weather";
+import Hotels from "./pages/Hotels";
+import Restaurants from "./pages/Restaurants";
 
 function App() {
   return (
@@ -15,6 +19,10 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/interface" element={<Interface />} />
         <Route path="/destinations" element={<Destinations />} />
+        <Route path="/budget" element={<Budget />} />
+        <Route path="/weather" element={<Weather />} />
+        <Route path="/hotels" element={<Hotels />} />
+        <Route path="/restaurants" element={<Restaurants />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,5 +1,3 @@
-// index.js
-
 const express = require("express");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
@@ -9,15 +7,11 @@ require("dotenv").config();
 
 const app = express();
 
-/* ─────────────────────────────────────────
-   Middlewares
-───────────────────────────────────────── */
+/* Middlewares */
 app.use(cors());
 app.use(express.json());
 
-/* ─────────────────────────────────────────
-   MongoDB Connection
-───────────────────────────────────────── */
+/* MongoDB Connection */
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
@@ -27,9 +21,7 @@ mongoose
     console.log("❌ MongoDB connection error:", err.message);
   });
 
-/* ─────────────────────────────────────────
-   User Schema + Model
-───────────────────────────────────────── */
+/* User Schema + Model */
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -67,9 +59,7 @@ userSchema.pre("save", async function () {
 
 const User = mongoose.model("User", userSchema);
 
-/* ─────────────────────────────────────────
-   JWT Token Generator
-───────────────────────────────────────── */
+/* JWT Token Generator */
 const createToken = (id) => {
   return jwt.sign(
     { id },
@@ -78,16 +68,14 @@ const createToken = (id) => {
   );
 };
 
-/* ─────────────────────────────────────────
-   Routes
-───────────────────────────────────────── */
+/* Routes*/
 
 /* Health Check */
 app.get("/", (req, res) => {
   res.send("CeyGo Backend Running ✅");
 });
 
-/* ── SIGNUP ───────────────────────── */
+/* SIGNUP */
 app.post("/api/auth/signup", async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -141,7 +129,7 @@ app.post("/api/auth/signup", async (req, res) => {
   }
 });
 
-/* ── LOGIN ───────────────────────── */
+/* LOGIN  */
 app.post("/api/auth/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -194,9 +182,7 @@ app.post("/api/auth/login", async (req, res) => {
   }
 });
 
-/* ─────────────────────────────────────────
-   Server Start
-───────────────────────────────────────── */
+/* Server Start */
 const PORT = process.env.PORT || 5004;
 
 app.listen(PORT, () => {

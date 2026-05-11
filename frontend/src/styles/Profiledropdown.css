@@ -1,0 +1,266 @@
+/* ── User Area Wrapper ── */
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-divider {
+  width: 1px;
+  height: 26px;
+  background: rgba(0, 30, 64, 0.12);
+  margin: 0 6px;
+  flex-shrink: 0;
+}
+
+/* ── Wishlist Icon Button ── */
+.nav-icon-btn {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--navy);
+  transition: background .2s, color .2s;
+}
+
+.nav-icon-btn:hover {
+  background: rgba(0, 30, 64, 0.07);
+  color: var(--teal);
+}
+
+.nav-icon-btn svg {
+  display: block;
+  transition: stroke .2s;
+}
+
+.nav-icon-btn:hover svg {
+  stroke: var(--teal);
+}
+
+.wishlist-badge {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  background: var(--teal);
+  color: white;
+  font-size: 9px;
+  font-weight: 700;
+  border-radius: 100px;
+  min-width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  line-height: 1;
+  border: 2px solid var(--sand);
+}
+
+.nav-icon-btn .nav-tooltip {
+  position: absolute;
+  bottom: -32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--navy);
+  color: white;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .18s;
+  font-family: 'DM Sans', sans-serif;
+  z-index: 200;
+}
+
+.nav-icon-btn:hover .nav-tooltip {
+  opacity: 1;
+}
+
+/* ── Profile Pill ── */
+.nav-profile-wrap {
+  position: relative;
+}
+
+.nav-profile {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: rgba(0, 30, 64, 0.05);
+  border: 1px solid rgba(0, 30, 64, 0.1);
+  border-radius: 100px;
+  padding: 5px 14px 5px 5px;
+  cursor: pointer;
+  transition: background .2s, border-color .2s;
+  user-select: none;
+}
+
+.nav-profile:hover {
+  background: rgba(0, 106, 101, 0.09);
+  border-color: rgba(0, 106, 101, 0.28);
+}
+
+.profile-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 100px;
+  background: linear-gradient(135deg, var(--teal) 0%, #004d49 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+  letter-spacing: .01em;
+  white-space: nowrap;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-chevron {
+  font-size: 9px;
+  color: rgba(0, 30, 64, 0.4);
+  transition: transform .22s;
+  margin-left: 1px;
+  line-height: 1;
+}
+
+.nav-profile-wrap.open .profile-chevron {
+  transform: rotate(180deg);
+}
+
+/* ── Dropdown ── */
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background: white;
+  border: 1px solid rgba(0, 30, 64, 0.1);
+  border-radius: 20px;
+  padding: 8px;
+  min-width: 216px;
+  box-shadow: 0 20px 56px rgba(0, 30, 64, 0.15);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px) scale(0.97);
+  transition: opacity .22s, transform .22s;
+  z-index: 300;
+  transform-origin: top right;
+}
+
+.nav-profile-wrap.open .profile-dropdown {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0) scale(1);
+}
+
+.dropdown-header {
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid rgba(0, 30, 64, 0.07);
+  margin-bottom: 6px;
+}
+
+.dropdown-greeting {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 3px;
+}
+
+.dropdown-username {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.2;
+}
+
+.dropdown-email {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  color: var(--navy);
+  cursor: pointer;
+  transition: background .15s;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+}
+
+.dropdown-item:hover {
+  background: rgba(0, 30, 64, 0.05);
+}
+
+.dropdown-item .d-icon {
+  font-size: 15px;
+  width: 22px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.dropdown-item .d-badge {
+  margin-left: auto;
+  background: rgba(0, 106, 101, 0.1);
+  color: var(--teal);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 100px;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: rgba(0, 30, 64, 0.07);
+  margin: 6px 8px;
+}
+
+.dropdown-item.danger {
+  color: #b91c1c;
+}
+
+.dropdown-item.danger:hover {
+  background: rgba(185, 28, 28, 0.06);
+}
+
+@media (max-width: 900px) {
+  .profile-name {
+    display: none;
+  }
+}

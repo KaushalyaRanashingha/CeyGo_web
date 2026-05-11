@@ -1,0 +1,108 @@
+.bg-subtle {
+  background: #f4f0e6;
+}
+
+.curated-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 40px;
+}
+
+.curated-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+}
+
+.curated-col-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.card-row {
+  display: flex;
+  gap: 20px;
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 16px;
+  transition: box-shadow .25s, transform .25s;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+.card-row:hover {
+  box-shadow: 0 12px 40px rgba(0, 30, 64, .1);
+  transform: translateY(-2px);
+}
+
+.card-thumb {
+  width: 108px;
+  height: 108px;
+  border-radius: 14px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .4s;
+}
+
+.card-row:hover .card-thumb img {
+  transform: scale(1.08);
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+}
+
+.card-name {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--navy);
+}
+
+.card-price {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--teal);
+}
+
+.stars {
+  color: #f59e0b;
+  font-size: 12px;
+  margin: 4px 0;
+}
+
+.card-desc {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+.card-tag {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin: 4px 0;
+}
+
+@media (max-width: 900px) {
+  .curated-grid {
+    grid-template-columns: 1fr;
+  }
+}

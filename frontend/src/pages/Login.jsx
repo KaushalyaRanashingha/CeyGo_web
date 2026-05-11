@@ -1,11 +1,3 @@
-/**
- * Login.jsx  –  CeyGo Sign-In Page
- *
- * Uses React Router's useNavigate.
- * Connects to:  POST http://localhost:5004/api/auth/login
- * On success: stores JWT in localStorage, navigates to /interface
- */
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -260,15 +252,15 @@ const GoogleIcon = () => (
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function Login() {
-  const navigate = useNavigate(); // ✅ React Router navigation
+  const navigate = useNavigate(); 
 
   const [form, setForm]           = useState({ email: "", password: "" });
   const [errors, setErrors]       = useState({});
   const [showPwd, setShowPwd]     = useState(false);
   const [remember, setRemember]   = useState(false);
   const [loading, setLoading]     = useState(false);
-  const [serverMsg, setServerMsg] = useState(null); // { text, type }
-  const [toast, setToast]         = useState(null); // { msg, type }
+  const [serverMsg, setServerMsg] = useState(null); 
+  const [toast, setToast]         = useState(null); 
 
   const set = (key) => (e) => {
     setForm((f) => ({ ...f, [key]: e.target.value }));
@@ -283,7 +275,7 @@ export default function Login() {
     return e;
   }
 
-  // ✅ showToast only shows/hides the toast — does NOT navigate
+  // showToast only shows/hides the toast — does NOT navigate
   function showToast(msg, type = "error") {
     setToast({ msg, type });
     setTimeout(() => setToast(null), 4000);
@@ -313,7 +305,7 @@ export default function Login() {
         return;
       }
 
-      // ✅ Persist auth data
+      // Persist auth data
       const storage = remember ? localStorage : sessionStorage;
       storage.setItem("ceygo_token", data.token);
       localStorage.setItem("ceygo_user", JSON.stringify(data.user));
@@ -321,7 +313,7 @@ export default function Login() {
       setServerMsg({ text: `Welcome back, ${data.user.name}! 🌴`, type: "success" });
       showToast(`Signed in as ${data.user.name}`, "success");
 
-      // ✅ Navigate to /interface after toast is visible
+      // Navigate to /interface after toast is visible
       setTimeout(() => navigate("/interface"), 1400);
 
     } catch {

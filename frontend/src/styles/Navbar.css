@@ -1,0 +1,140 @@
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(253, 249, 241, 0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--navy);
+  cursor: pointer;
+  user-select: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 4px;
+  list-style: none;
+  align-items: center;
+}
+
+/* ── Universal nav link — looks identical whether scroll or page ── */
+.nav-link {
+  /* Reset all button defaults */
+  appearance: none;
+  -webkit-appearance: none;
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  padding: 6px 12px;
+  margin: 0;
+
+  /* Typography */
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(0, 30, 64, 0.6);
+  text-decoration: none;
+  letter-spacing: .02em;
+  line-height: 1;
+  white-space: nowrap;
+
+  /* Interaction */
+  cursor: pointer;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  transition: color .2s, background .2s;
+}
+
+.nav-link:hover {
+  color: var(--teal);
+  background: rgba(0, 106, 101, 0.06);
+}
+
+.nav-link.active {
+  color: var(--teal);
+  font-weight: 600;
+}
+
+/* Page-type links get a subtle pill so users know they navigate away */
+.nav-link.page-link {
+  color: rgba(0, 30, 64, 0.5);
+}
+
+.nav-link.page-link:hover {
+  color: var(--teal);
+  background: rgba(0, 106, 101, 0.06);
+}
+
+.nav-link.page-link.active {
+  color: var(--teal);
+  font-weight: 600;
+}
+
+/* Thin divider between scroll-group and page-group */
+.nav-divider-line {
+  width: 1px;
+  height: 18px;
+  background: rgba(0, 30, 64, 0.15);
+  margin: 0 8px;
+  flex-shrink: 0;
+}
+
+.nav-mobile-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: var(--navy);
+  padding: 4px 8px;
+}
+
+@media (max-width: 900px) {
+  .nav-links {
+    display: none;
+  }
+
+  .nav-mobile-toggle {
+    display: block;
+  }
+
+  .nav-links.mobile-open {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: absolute;
+    top: 68px;
+    left: 0;
+    right: 0;
+    background: rgba(253, 249, 241, 0.98);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    gap: 4px;
+    z-index: 99;
+  }
+
+  .nav-divider-line {
+    display: none;
+  }
+
+  .nav-link {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+}

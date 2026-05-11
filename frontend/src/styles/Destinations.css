@@ -1,0 +1,128 @@
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 288px);
+  gap: 16px;
+}
+
+.dest-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  cursor: pointer;
+}
+
+.dest-card.large {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.dest-card img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .55s cubic-bezier(.25, .46, .45, .94);
+}
+
+.dest-card:hover img {
+  transform: scale(1.07);
+}
+
+.dest-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 20, 50, .85) 0%, transparent 55%);
+}
+
+.dest-card.large .dest-overlay {
+  background: linear-gradient(to top, rgba(0, 20, 50, .92) 0%, transparent 50%);
+}
+
+.dest-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 28px;
+  width: 100%;
+}
+
+.dest-badge {
+  display: inline-block;
+  background: rgba(118, 243, 234, .18);
+  backdrop-filter: blur(8px);
+  color: #59dad1;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 100px;
+  margin-bottom: 8px;
+}
+
+.dest-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #fbbf24;
+  font-size: 12px;
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+.dest-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.1;
+}
+
+.dest-card:not(.large) .dest-name {
+  font-size: 22px;
+}
+
+.dest-season {
+  font-size: 12px;
+  color: rgba(255, 255, 255, .7);
+  margin-top: 4px;
+}
+
+.dest-desc {
+  font-size: 13px;
+  color: rgba(255, 255, 255, .75);
+  margin: 10px 0 18px;
+  max-width: 300px;
+}
+
+.btn-outline-white {
+  background: rgba(255, 255, 255, .15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, .3);
+  color: white;
+  padding: 10px 22px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background .2s, color .2s;
+  letter-spacing: .04em;
+}
+
+.btn-outline-white:hover {
+  background: white;
+  color: var(--navy);
+}
+
+@media (max-width: 900px) {
+  .bento-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dest-card.large {
+    grid-column: span 2;
+  }
+}
