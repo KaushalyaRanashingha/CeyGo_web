@@ -1,17 +1,16 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
-exports.verifyToken = (req, res, next) => {
-  const token = req.cookies.token;
-
-  if (!token) {
-    return res.redirect("/login");
-  }
-
+const protect = async (req, res, next) => {
   try {
-    const decoded = jwt.verify(token, "secretkey");
-    req.user = decoded;
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) return res.status(401).json({ message: "No token" });
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = await User.findById(decoded.id);
     next();
-  } catch (err) {
-    return res.redirect("/login");
+  } catch (error) {
+    res.status(401).json({ message: "Unauthorized" });
   }
 };
+
+module.exports = protect;

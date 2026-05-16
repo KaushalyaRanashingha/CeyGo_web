@@ -1,19 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const authController = require("../controllers/authController");
+const { registerUser, loginUser, getMe } = require("../controllers/authController");
+const protect = require("../middleware/authMiddleware");
 
-// Login routes
-router.get("/login", authController.showLogin);
-router.post("/login", authController.login);
-
-// Register routes
-router.get("/register", authController.showRegister);
-
-// Use multer middleware for file uploads
-router.post(
-  "/register",
-  authController.uploadFields, // <- multer middleware to handle files
-  authController.register
-);
+router.post("/register", registerUser);
+router.post("/login", loginUser);
+router.get("/me", protect, getMe); // ✅ Protected route to refresh user data
 
 module.exports = router;

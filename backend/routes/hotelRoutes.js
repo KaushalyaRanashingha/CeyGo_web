@@ -1,9 +1,11 @@
-
 const express = require("express");
 const router = express.Router();
-
-router.get("/dashboard", (req, res) => {
-  res.send("Admin Dashboard");
-});
-
+const { createHotel, getHotels, getHotelById, updateHotel, deleteHotel } = require("../controllers/hotelController");
+const protect = require("../middleware/authMiddleware");
+const adminMiddleware = require("../middleware/adminMiddleware");
+router.post("/", protect, adminMiddleware, createHotel);
+router.get("/", getHotels);
+router.get("/:id", getHotelById);
+router.put("/:id", protect, adminMiddleware, updateHotel);
+router.delete("/:id", protect, adminMiddleware, deleteHotel);
 module.exports = router;

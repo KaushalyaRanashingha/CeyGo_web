@@ -397,7 +397,7 @@ export default function Login() {
               <input
                 className={`li-input${errors.email ? " error" : ""}`}
                 type="email"
-                placeholder="you@example.com"
+                placeholder="you@gmail.com"
                 value={form.email}
                 onChange={set("email")}
                 onKeyDown={handleKeyDown}
@@ -461,7 +461,7 @@ export default function Login() {
 
           <p className="li-switch">
             Don't have an account?{" "}
-            <button className="li-switch-btn" onClick={() => navigate("/signup")}>
+            <button className="li-switch-btn" onClick={() => navigate("/Register")}>
               Create one free
             </button>
           </p>

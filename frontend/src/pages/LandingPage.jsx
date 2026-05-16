@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import LoginPage  from "./Login";
-import SignupPage from "./Signup";
+import SignupPage from "./register";
 
 const NAV_LINKS = ["Home", "Destinations", "Beach Stays", "AI Planner", "Events", "Contact"];
 

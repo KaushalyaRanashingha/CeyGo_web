@@ -8,5 +8,5 @@ title: "Admin Dashboard"
 });
 
 });
-
+router.get("/admin/destinations", adminController.destinationsPage);
 module.exports = router;

@@ -1,9 +1,13 @@
 const mongoose = require("mongoose");
 
-mongoose.connect("mongodb://127.0.0.1:27017/ceygoAdmin");
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("MongoDB Connected");
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+};
 
-const db = mongoose.connection;
-
-db.once("open", () => {
-  console.log("MongoDB Connected");
-});
+module.exports = connectDB;

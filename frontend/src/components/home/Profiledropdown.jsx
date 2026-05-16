@@ -3,11 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import "../../styles/Profiledropdown.css";
 
-export default function ProfileDropdown({
-  user,
-  wishlistCount = 0,
-  onSignOut,
-}) {
+export default function ProfileDropdown({ user, wishlistCount = 0, onSignOut }) {
   const [open, setOpen] = useState(false);
   const wrapRef = useRef(null);
 
@@ -18,27 +14,33 @@ export default function ProfileDropdown({
         setOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handler);
-
-    return () => {
-      document.removeEventListener("mousedown", handler);
-    };
+    return () => document.removeEventListener("mousedown", handler);
   }, []);
 
   // ✅ Prevent crash if no logged user
   if (!user) return null;
 
-  // ✅ Create short name
+  // ✅ Use user.name (DB field) — fallback to user.fullName for backwards compat
+  const displayName = user.name || user.fullName || "User";
+
+  // ✅ Create short name: "John D." format
   const shortName = (() => {
-    const parts = user.fullName?.trim().split(" ") || [];
-
+    const parts = displayName.trim().split(" ");
     if (parts.length === 0) return "User";
-
     if (parts.length === 1) return parts[0];
-
     return `${parts[0]} ${parts[parts.length - 1][0]}.`;
   })();
+
+  // ✅ Generate initials
+  const initials =
+    user.initials ||
+    displayName
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
 
   return (
     <div className="nav-user">
@@ -62,14 +64,10 @@ export default function ProfileDropdown({
         </svg>
 
         {wishlistCount > 0 && (
-          <span className="wishlist-badge">
-            {wishlistCount}
-          </span>
+          <span className="wishlist-badge">{wishlistCount}</span>
         )}
 
-        <span className="nav-tooltip">
-          Wishlist
-        </span>
+        <span className="nav-tooltip">Wishlist</span>
       </button>
 
       <div className="nav-divider" />
@@ -77,9 +75,7 @@ export default function ProfileDropdown({
       {/* Profile Dropdown */}
       <div
         ref={wrapRef}
-        className={`nav-profile-wrap ${
-          open ? "open" : ""
-        }`}
+        className={`nav-profile-wrap ${open ? "open" : ""}`}
       >
         {/* Profile Button */}
         <div
@@ -90,102 +86,61 @@ export default function ProfileDropdown({
           aria-haspopup="true"
           aria-expanded={open}
           onKeyDown={(e) => {
-            if (
-              e.key === "Enter" ||
-              e.key === " "
-            ) {
-              setOpen((o) => !o);
-            }
+            if (e.key === "Enter" || e.key === " ") setOpen((o) => !o);
           }}
         >
           {/* Avatar */}
           <div className="profile-avatar">
             {user.avatar ? (
-              <img
-                src={user.avatar}
-                alt={user.fullName}
-              />
+              <img src={user.avatar} alt={displayName} />
             ) : (
-              user.initials
+              initials
             )}
           </div>
 
           {/* User Name */}
-          <span className="profile-name">
-            {shortName}
-          </span>
+          <span className="profile-name">{shortName}</span>
 
           {/* Arrow */}
-          <span className="profile-chevron">
-            ▾
-          </span>
+          <span className="profile-chevron">▾</span>
         </div>
 
         {/* Dropdown Menu */}
-        <div
-          className="profile-dropdown"
-          role="menu"
-        >
+        <div className="profile-dropdown" role="menu">
           {/* User Info */}
           <div className="dropdown-header">
-            <div className="dropdown-greeting">
-              Logged in as
-            </div>
-
+            <div className="dropdown-greeting">Logged in as</div>
             <div className="dropdown-username">
-              {user.fullName}
+              {displayName}
+              {/* ✅ Show Admin badge if user is admin */}
+              {user.isAdmin && (
+                <span className="admin-badge">Admin</span>
+              )}
             </div>
-
-            <div className="dropdown-email">
-              {user.email}
-            </div>
+            <div className="dropdown-email">{user.email}</div>
           </div>
 
           {/* Menu Items */}
-          <button
-            className="dropdown-item"
-            role="menuitem"
-          >
-            <span className="d-icon">
-              👤
-            </span>
+          <button className="dropdown-item" role="menuitem">
+            <span className="d-icon">👤</span>
             My Profile
           </button>
 
-          <button
-            className="dropdown-item"
-            role="menuitem"
-          >
-            <span className="d-icon">
-              🗺️
-            </span>
+          <button className="dropdown-item" role="menuitem">
+            <span className="d-icon">🗺️</span>
             My Itineraries
           </button>
 
-          <button
-            className="dropdown-item"
-            role="menuitem"
-          >
-            <span className="d-icon">
-              ❤️
-            </span>
-
+          <button className="dropdown-item" role="menuitem">
+            <span className="d-icon">❤️</span>
             Wishlist
-
             {wishlistCount > 0 && (
-              <span className="d-badge">
-                {wishlistCount}
-              </span>
+              <span className="d-badge">{wishlistCount}</span>
             )}
           </button>
 
-          <button
-            className="dropdown-item"
-            role="menuitem"
-          >
-            <span className="d-icon">
-              ⚙️
-            </span>
+          <button className="dropdown-item" role="menuitem">
+            <span className="d-icon">⚙️</span>
             Settings
           </button>
 
@@ -197,21 +152,14 @@ export default function ProfileDropdown({
             role="menuitem"
             onClick={() => {
               setOpen(false);
-
-              // ✅ Remove logged user
-              localStorage.removeItem(
-                "users"
-              );
-
-              // ✅ Optional logout callback
-              if (onSignOut) {
-                onSignOut();
-              }
+              // ✅ Remove correct keys set by Login.jsx
+              localStorage.removeItem("ceygo_user");
+              localStorage.removeItem("ceygo_token");
+              sessionStorage.removeItem("ceygo_token");
+              if (onSignOut) onSignOut();
             }}
           >
-            <span className="d-icon">
-              ↩
-            </span>
+            <span className="d-icon">↩</span>
             Sign Out
           </button>
         </div>

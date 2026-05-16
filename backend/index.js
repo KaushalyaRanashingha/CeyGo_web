@@ -1,190 +1,96 @@
+const dotenv = require("dotenv");
+dotenv.config();
+
 const express = require("express");
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const cors = require("cors");
-require("dotenv").config();
+const path = require("path");
+
+const connectDB = require("./config/db");
+
+const authRoutes = require("./routes/authRoutes");
+const hotelRoutes = require("./routes/hotelRoutes");
+const bookingRoutes = require("./routes/bookingRoutes");
+const planRoutes = require("./routes/planRoutes");
+const destinationRoutes = require("./routes/destinationRoutes");
+const eventRoutes = require("./routes/eventRoutes");
+const budgetRoutes = require("./routes/budgetRoutes");
+const restaurantRoutes = require("./routes/restaurantRoutes");
+const restaurantBookingRoutes = require("./routes/restaurantBookingRoutes");
+const guideRoutes = require("./routes/guideRoutes");
+const guideBookingRoutes = require("./routes/guideBookingRoutes");
+const driverRoutes = require("./routes/driverRoutes");
+const driverBookingRoutes = require("./routes/driverBookingRoutes");
+
+connectDB();
 
 const app = express();
 
-/* Middlewares */
-app.use(cors());
+// =====================
+// CORE MIDDLEWARE
+// =====================
+app.use(cors({
+  origin: ["http://localhost:3000", "http://localhost:5173"],
+  credentials: true,
+}));
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // ✅ FIX: for login forms
 
-/* MongoDB Connection */
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log("✅ MongoDB connected successfully");
-  })
-  .catch((err) => {
-    console.log("❌ MongoDB connection error:", err.message);
-  });
+// =====================
+// EJS SETUP (ADMIN PANEL)
+// =====================
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
-/* User Schema + Model */
-const userSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      trim: true,
-      lowercase: true,
-    },
-
-    password: {
-      type: String,
-      required: true,
-      minlength: 6,
-    },
-  },
-  {
-    timestamps: true,
-  }
-);
-
-/* Password Hash Before Save */
-userSchema.pre("save", async function () {
-  if (!this.isModified("password")) return;
-
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-});
-
-const User = mongoose.model("User", userSchema);
-
-/* JWT Token Generator */
-const createToken = (id) => {
-  return jwt.sign(
-    { id },
-    process.env.JWT_SECRET,
-    { expiresIn: "7d" }
-  );
-};
-
-/* Routes*/
-
-/* Health Check */
+// =====================
+// HOME ROUTE
+// =====================
 app.get("/", (req, res) => {
-  res.send("CeyGo Backend Running ✅");
+  res.json({ message: "CeyGo API is running 🚀" });
 });
 
-/* SIGNUP */
-app.post("/api/auth/signup", async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
+// =====================
+// ADMIN ROUTES (EJS)
+// =====================
 
-    /* Validation */
-    if (!name || !email || !password) {
-      return res.status(400).json({
-        message: "Please fill all fields",
-      });
-    }
+// Admin Login Page
+app.get("/admin/login", (req, res) => {
+  res.render("admin/login");
+});
 
-    if (password.length < 6) {
-      return res.status(400).json({
-        message: "Password must be at least 6 characters",
-      });
-    }
+// Simple login handler (replace with DB later)
+app.post("/admin/login", (req, res) => {
+  const { email, password } = req.body;
 
-    /* Check Existing User */
-    const existingUser = await User.findOne({
-      email: email.toLowerCase(),
-    });
-
-    if (existingUser) {
-      return res.status(400).json({
-        message: "Email already exists",
-      });
-    }
-
-    /* Create User */
-    const user = await User.create({
-      name: name.trim(),
-      email: email.toLowerCase().trim(),
-      password,
-    });
-
-    res.status(201).json({
-      message: "Signup successful",
-      token: createToken(user._id),
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-      },
-    });
-  } catch (error) {
-    console.log("Signup Error:", error.message);
-
-    res.status(500).json({
-      message: "Server error during signup",
-    });
+  if (email === "admin@ceygo.com" && password === "admin123") {
+    return res.redirect("/admin/dashboard");
   }
+
+  return res.send("Invalid credentials");
 });
 
-/* LOGIN  */
-app.post("/api/auth/login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
 
-    /* Validation */
-    if (!email || !password) {
-      return res.status(400).json({
-        message: "Please provide email and password",
-      });
-    }
 
-    /* Find User */
-    const user = await User.findOne({
-      email: email.toLowerCase().trim(),
-    });
+// =====================
+// API ROUTES
+// =====================
+app.use("/api/auth", authRoutes);
+app.use("/api/hotels", hotelRoutes);
+app.use("/api/bookings", bookingRoutes);
+app.use("/api/plans", planRoutes);
+app.use("/api/destinations", destinationRoutes);
+app.use("/api/events", eventRoutes);
+app.use("/api/restaurants", restaurantRoutes);
+app.use("/api/budgets", budgetRoutes);
+app.use("/api/restaurant-bookings", restaurantBookingRoutes);
+app.use("/api/guides", guideRoutes);
+app.use("/api/guide-bookings", guideBookingRoutes);
+app.use("/api/drivers", driverRoutes);
+app.use("/api/driver-bookings", driverBookingRoutes);
 
-    if (!user) {
-      return res.status(400).json({
-        message: "Invalid email or password",
-      });
-    }
-
-    /* Compare Password */
-    const isMatch = await bcrypt.compare(
-      password,
-      user.password
-    );
-
-    if (!isMatch) {
-      return res.status(400).json({
-        message: "Invalid email or password",
-      });
-    }
-
-    res.status(200).json({
-      message: "Login successful",
-      token: createToken(user._id),
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-      },
-    });
-  } catch (error) {
-    console.log("Login Error:", error.message);
-
-    res.status(500).json({
-      message: "Server error during login",
-    });
-  }
-});
-
-/* Server Start */
-const PORT = process.env.PORT || 5004;
-
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+// =====================
+// START SERVER
+// =====================
+app.listen(5004, () => {
+  console.log("Server running on port 5004");
 });

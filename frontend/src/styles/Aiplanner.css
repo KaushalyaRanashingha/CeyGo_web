@@ -95,3 +95,176 @@
     padding: 28px 20px;
   }
 }
+
+
+/* MAIN WRAPPER */
+.planner-result-wrapper {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+/* HERO RESULT */
+.planner-hero-result {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #0ea5e9, #2563eb);
+  color: white;
+  padding: 25px;
+  border-radius: 20px;
+  margin-bottom: 30px;
+}
+
+.planner-title {
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.planner-subtext {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.planner-actions button {
+  margin-left: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+/* BUTTONS */
+.fav-btn {
+  background: white;
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.print-btn {
+  background: #111827;
+  color: white;
+}
+
+/* TIMELINE */
+.planner-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* DAY CARD */
+.day-card-modern {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* HEADER */
+.day-header-modern {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.day-badge {
+  background: #0ea5e9;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.day-place {
+  font-size: 20px;
+  margin-top: 5px;
+}
+
+/* META */
+.day-meta span {
+  margin-left: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+/* QUICK INFO */
+.quick-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin: 15px 0;
+}
+
+.info-box {
+  display: flex;
+  gap: 10px;
+  background: #f9fafb;
+  padding: 12px;
+  border-radius: 12px;
+}
+
+.info-box h5 {
+  font-size: 13px;
+  margin: 0;
+}
+
+.info-box p {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+}
+
+/* ACTIVITIES */
+.activities-modern {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.activity-modern-card {
+  background: #ffffff;
+  border: 1px solid #eee;
+  padding: 15px;
+  border-radius: 14px;
+  transition: 0.3s;
+}
+
+.activity-modern-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* TOP ROW */
+.activity-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.time-pill {
+  background: #e0f2fe;
+  color: #0284c7;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.cost-pill {
+  background: #dcfce7;
+  color: #16a34a;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.activity-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.activity-desc {
+  font-size: 13px;
+  color: #666;
+}

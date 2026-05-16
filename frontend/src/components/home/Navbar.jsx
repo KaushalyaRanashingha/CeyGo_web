@@ -1,42 +1,25 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { Heart } from "lucide-react";
 import ProfileDropdown from "./Profiledropdown";
 import { NAV_LINKS } from "../../data/homeData";
 import "../../styles/Navbar.css";
+
 
 export default function Navbar({ onNavClick }) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [activeNav, setActiveNav] = useState("");
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // ✅ correct place
 
-  // ✅ Get logged user from localStorage
-  const storedUsers = JSON.parse(
-    localStorage.getItem("users")
-  );
+  const storedUser = localStorage.getItem("ceygo_user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
 
-  const user = Array.isArray(storedUsers)
-    ? storedUsers[0]
-    : storedUsers;
-
-  // ✅ Auto generate initials
-  if (user && !user.initials) {
-    user.initials = user.fullName
-      ?.split(" ")
-      .map((name) => name[0])
-      .join("")
-      .toUpperCase();
-  }
-
-  // ✅ Handle scroll navigation
   const handleScrollNav = (item) => {
     setMobileNavOpen(false);
     setActiveNav(item.name);
 
-    if (
-      item.type === "scroll" &&
-      onNavClick
-    ) {
+    if (item.type === "scroll" && onNavClick) {
       onNavClick(item.name);
     }
   };
@@ -44,31 +27,19 @@ export default function Navbar({ onNavClick }) {
   return (
     <header className="nav">
       {/* LOGO */}
-      <div
-        className="nav-logo"
-        onClick={() => navigate("/")}
-      >
+      <div className="nav-logo" onClick={() => navigate("/")}>
         CeyGo
       </div>
 
-      {/* NAVIGATION */}
+      {/* NAV LINKS */}
       <nav>
-        <ul
-          className={`nav-links ${
-            mobileNavOpen ? "mobile-open" : ""
-          }`}
-        >
+        <ul className={`nav-links ${mobileNavOpen ? "mobile-open" : ""}`}>
           {NAV_LINKS.map((item) => (
             <li key={item.name}>
-              {/* PAGE LINKS */}
               {item.type === "page" ? (
                 <Link
                   to={item.path}
-                  className={`nav-link ${
-                    activeNav === item.name
-                      ? "active"
-                      : ""
-                  }`}
+                  className={`nav-link ${activeNav === item.name ? "active" : ""}`}
                   onClick={() => {
                     setMobileNavOpen(false);
                     setActiveNav(item.name);
@@ -77,14 +48,9 @@ export default function Navbar({ onNavClick }) {
                   {item.name}
                 </Link>
               ) : (
-                /* SCROLL LINKS */
                 <a
                   href={`#${item.name}`}
-                  className={`nav-link ${
-                    activeNav === item.name
-                      ? "active"
-                      : ""
-                  }`}
+                  className={`nav-link ${activeNav === item.name ? "active" : ""}`}
                   onClick={(e) => {
                     e.preventDefault();
                     handleScrollNav(item);
@@ -97,29 +63,38 @@ export default function Navbar({ onNavClick }) {
           ))}
         </ul>
 
-        {/* MOBILE MENU BUTTON */}
         <button
           className="nav-mobile-toggle"
-          onClick={() =>
-            setMobileNavOpen((o) => !o)
-          }
+          onClick={() => setMobileNavOpen((o) => !o)}
         >
           {mobileNavOpen ? "✕" : "☰"}
         </button>
       </nav>
 
-      {/* PROFILE DROPDOWN */}
-      <ProfileDropdown
-        user={user}
-        wishlistCount={0}
-        onSignOut={() => {
-          // ✅ Remove user from localStorage
-          localStorage.removeItem("users");
-
-          // ✅ Redirect to login
-          navigate("/login");
-        }}
+      {/* WISHLIST ICON (FIXED) */}
+      <Heart
+        size={22}
+        style={{ cursor: "pointer", marginRight: "10px" }}
+        onClick={() => navigate("/wishlist")}
       />
+
+      {/* PROFILE / SIGN IN */}
+      {user ? (
+        <ProfileDropdown
+          user={user}
+          wishlistCount={0}
+          onSignOut={() => {
+            localStorage.removeItem("ceygo_user");
+            localStorage.removeItem("ceygo_token");
+            sessionStorage.removeItem("ceygo_token");
+            navigate("/login");
+          }}
+        />
+      ) : (
+        <button className="nav-signin-btn" onClick={() => navigate("/login")}>
+          Sign In
+        </button>
+      )}
     </header>
   );
 }

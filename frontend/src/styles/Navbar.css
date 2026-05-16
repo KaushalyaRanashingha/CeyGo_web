@@ -138,3 +138,43 @@
     font-size: 14px;
   }
 }
+
+/* ── Add these rules to your existing Navbar.css ── */
+
+/* Sign In button shown when no user is logged in */
+.nav-signin-btn {
+  background: var(--navy, #001e40);
+  color: white;
+  border: none;
+  padding: 9px 22px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 0.04em;
+  transition: opacity 0.2s, transform 0.2s;
+  white-space: nowrap;
+}
+.nav-signin-btn:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+/* ── Add these rules to your existing Profiledropdown.css ── */
+
+/* Admin badge shown next to name in dropdown header */
+.admin-badge {
+  display: inline-flex;
+  align-items: center;
+  background: #001e40;
+  color: #76f3ea;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 100px;
+  margin-left: 8px;
+  vertical-align: middle;
+}

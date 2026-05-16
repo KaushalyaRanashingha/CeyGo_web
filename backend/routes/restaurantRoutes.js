@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-
-router.get("/dashboard", (req, res) => {
-  res.send("Admin Dashboard");
-});
-
+const { createRestaurant, getRestaurants, getRestaurantById, deleteRestaurant } = require("../controllers/restaurantController");
+router.post("/", createRestaurant);
+router.get("/", getRestaurants);
+router.get("/:id", getRestaurantById);
+router.delete("/:id", deleteRestaurant);
 module.exports = router;
