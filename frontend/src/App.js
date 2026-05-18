@@ -9,6 +9,8 @@ import Budget from "./pages/Budget";
 import Weather from "./pages/Weather";
 import Hotels from "./pages/Hotels";
 import Restaurants from "./pages/Restaurants";
+import Driver from "./pages/Driver";
+import Guides from "./pages/Guides";
 
 
 function App() {
@@ -24,6 +26,8 @@ function App() {
         <Route path="/weather" element={<Weather />} />
         <Route path="/hotels" element={<Hotels />} />
         <Route path="/restaurants" element={<Restaurants />} />
+        <Route path="/driver" element={<Driver />} />
+        <Route path="/guides" element={<Guides />} />
       </Routes>
     </BrowserRouter>
   );

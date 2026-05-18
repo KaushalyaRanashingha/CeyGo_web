@@ -10,7 +10,7 @@ export const NAV_LINKS = [
   { name: "Hotels", type: "page", path: "/hotels" },
   { name: "Restaurants", type: "page", path: "/restaurants" },
   { name: "Guides", type: "page", path: "/guides" },
-  { name: "Drivers", type: "page", path: "/drivers" },
+  { name: "Driver", type: "page", path: "/driver" },
 ];
 export const DESTINATIONS = [
   { name: "Galle Fort", tag: "UNESCO Heritage", rating: "4.9", season: "Dec – Apr", desc: "Colonial charm meets luxury boutiques.", large: true, img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBq8_gArPJAejoHFk5rRQC8Cj6LIQKMDRJ6qMzmSJa8tcFfa6UAeAPW3KxuDfvBj0zbbHmoevkX39GpEy8xlpYGRST-1hz_-DfLLD7DjaKb70qTevWLe82yPcLVErNeYkQoNL3vH1nKqaC2Q3T12BYm-sDYetByNVpCQiPKibyAhxJrkOSWRv9vtITUxjSDCs3S9bvkZyt9VGWDuD3PE6LoZ7lPHEeo2elBekle_Zua1cIJSY9s6rHogs499dCp4OFpMHnzCP3H3oI" },
