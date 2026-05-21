@@ -62,7 +62,7 @@ Interests: ${search.interests}
 
       // 🔥 GEMINI API
       const res = await axios.post(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyDFCxy7qHB-JQhvdkqiIe5cf4fO5TAvWZA`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyBrGe6fjonUNVGZL7P1kCkTlL6boK3p8no`,
         {
           contents: [{ parts: [{ text: prompt }] }],
         }
@@ -77,7 +77,7 @@ Interests: ${search.interests}
       setResult(parsed);
 
       // 🔥 AUTO-SAVE TO DATABASE and capture returned _id
-      const token = localStorage.getItem("ceygo_token"); // ✅ consistent key
+      const token = localStorage.getItem("ceygo_token"); 
 
       if (token) {
         const saveRes = await axios.post(

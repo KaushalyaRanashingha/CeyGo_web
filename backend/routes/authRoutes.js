@@ -1,10 +1,21 @@
 const express = require("express");
-const router = express.Router();
-const { registerUser, loginUser, getMe } = require("../controllers/authController");
-const protect = require("../middleware/authMiddleware");
 
+const router = express.Router();
+
+const {
+  registerUser,
+  loginUser,
+} = require("../controllers/authController");
+
+// TEST
+router.get("/", (req, res) => {
+  res.send("Auth Route Working");
+});
+
+// REGISTER
 router.post("/register", registerUser);
+
+// LOGIN
 router.post("/login", loginUser);
-router.get("/me", protect, getMe); // ✅ Protected route to refresh user data
 
 module.exports = router;
